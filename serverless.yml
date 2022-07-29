@@ -37,13 +37,53 @@ provider:
 
 
 functions:
-  # Defines an HTTP API endpoint that calls the main function in create.js
-  # - path: url path is /wus
-  # - method: POST request
   create:
+    # Defines an HTTP API endpoint that calls the main function in create.js
+    # - path: url path is /wus
+    # - method: POST request
     handler: create.main
     events:
       - http:
           path: wus
           cors: true
           method: post
+  get:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /wus/{id}
+    # - method: GET request
+    handler: get.main
+    events:
+      - http:
+          path: wus/{id}
+          cors: true
+          method: get
+  list:
+    # Defines an HTTP API endpoint that calls the main function in list.js
+    # - path: url path is /notes
+    # - method: GET request
+    handler: list.main
+    events:
+      - http:
+          path: wus
+          cors: true
+          method: get
+  update:
+    # Defines an HTTP API endpoint that calls the main function in update.js
+    # - path: url path is /wus/{id}
+    # - method: PUT request
+    handler: update.main
+    events:
+      - http:
+          path: wus/{id}
+          cors: true
+          method: put
+  delete:
+    # Defines an HTTP API endpoint that calls the main function in delete.js
+    # - path: url path is /wus/{id}
+    # - method: DELETE request
+    handler: delete.main
+    events:
+      - http:
+          path: wus/{id}
+          cors: true
+          method: delete

@@ -3,7 +3,7 @@ import handler from "./libs/handler-lib";
 import dynamoDb from "./libs/dynamodb-lib";
 
 export const main = handler(async (event, context) => {
-  const data = JSON.parse(event.body);
+
   // Request body is passed in as a JSON encoded string in 'event.body'
   const data = JSON.parse(event.body);
 
@@ -11,7 +11,7 @@ export const main = handler(async (event, context) => {
     TableName: process.env.tableName,
     Item: {
       // The attributes of the item to be created
-      userId: "123", // The id of the author
+      userId: "123", // The id of the creator
       wuId: uuid.v1(), // A unique uuid
       wuTitle: data.wuTitle, // Parsed from requet body
       wuDescription: data.wuDescription, // Parsed from request body

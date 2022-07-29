@@ -1,0 +1,6 @@
+{
+  "body": "{\"wuTitle\":\"Some Blarg Title\",\"wuDescription\":\"Some Blarg Description\",\"cloudApps\":11,\"onPremApps\":11,\"recordsPerMonth\":11,\"hoursPerMonth\":11,\"whoDoesItNow\":\"Paralegal\",\"hourlyRate\":40.5,\"attachment\":\"blarg.jpg\"}",
+  "pathParameters": {
+    "id": "6bf51ed0-0f75-11ed-9bd7-ddab1afaa235"
+  }
+}

@@ -1,6 +1,6 @@
 # Full Stack Challenge
 
-[Serverless Stack](http://serverless-stack.com) is a free comprehensive guide to creating full-stack serverless applications. We create a [note taking app](http://demo2.serverless-stack.com) from scratch.
+[FS-Challenge-API](https://github.com/nypeach/fs-challenge-api) is an application built in response to a Full Stack Challenge. This challenge can be found [here](https://thoughtfulautomation.notion.site/Full-Stack-Challenge-Serverless-AWS-App-c73f346b134948f1a578845fe4ab8ac0) from scratch.
 
 #### Endpoints
 ```

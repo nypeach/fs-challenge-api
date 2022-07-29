@@ -1,6 +1,6 @@
 # Full Stack Challenge
 
-[FS-Challenge-API](https://github.com/nypeach/fs-challenge-api) is an application built in response to a Full Stack Challenge. This challenge can be found [here](https://thoughtfulautomation.notion.site/Full-Stack-Challenge-Serverless-AWS-App-c73f346b134948f1a578845fe4ab8ac0) from scratch.
+[FS-Challenge-API](https://github.com/nypeach/fs-challenge-api) is an application built in response to a Full Stack Challenge given by [Thoughtful.ai](https://www.thoughtful.ai/). This challenge can be found [here](https://thoughtfulautomation.notion.site/Full-Stack-Challenge-Serverless-AWS-App-c73f346b134948f1a578845fe4ab8ac0).
 
 #### Endpoints
 ```

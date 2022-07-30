@@ -1,4 +1,9 @@
 {
-  "body": "{\"wuTitle\":\"Some Other Title\",\"wuDescription\":\"Some Other Description\",\"cloudApps\":2,\"onPremApps\":1,\"recordsPerMonth\":5000,\"hoursPerMonth\":800,\"whoDoesItNow\":\"Paralegal\",\"hourlyRate\":40.5,\"attachment\":\"other.jpg\"}"
+  "body": "{\"wuTitle\":\"Some Other Title\",\"wuDescription\":\"Some Other Description\",\"cloudApps\":2,\"onPremApps\":1,\"recordsPerMonth\":5000,\"hoursPerMonth\":800,\"whoDoesItNow\":\"Paralegal\",\"hourlyRate\":40.5,\"attachment\":\"other.jpg\"}",
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
 }
 

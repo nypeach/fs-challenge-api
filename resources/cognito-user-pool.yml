@@ -1,4 +1,81 @@
 Resources:
+
+  DefineAuthChallenge:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda-triggers/define-auth-challenge/
+      Handler: define-auth-challenge.handler
+      Runtime: nodejs12.x
+
+  CreateAuthChallenge:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda-triggers/create-auth-challenge/
+      Handler: create-auth-challenge.handler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          SES_FROM_ADDRESS: dan@thoughtfulautomation.com
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - ses:SendEmail
+              Resource: "*"
+
+  VerifyAuthChallengeResponse:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda-triggers/verify-auth-challenge-response/
+      Handler: verify-auth-challenge-response.handler
+      Runtime: nodejs12.x
+
+  PreSignUp:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda-triggers/pre-sign-up/
+      Handler: pre-sign-up.handler
+      Runtime: nodejs12.x
+
+  PostAuthentication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda-triggers/post-authentication/
+      Handler: post-authentication.handler
+      Runtime: nodejs12.x
+      Role: !GetAtt PostAuthenticationRole.Arn
+
+  PostAuthenticationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  SetUserAttributesPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: allow-set-user-attributes
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - cognito-idp:AdminUpdateUserAttributes
+            Resource:
+              - !GetAtt UserPool.Arn
+      Roles:
+        - !Ref PostAuthenticationRole
+
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
@@ -7,8 +84,65 @@ Resources:
       # Set email as an alias
       UsernameAttributes:
         - email
-      AutoVerifiedAttributes:
-        - email
+      Schema:
+        - Name: name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: email
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: false
+          RequireNumbers: false
+          RequireSymbols: false
+          RequireUppercase: false
+      MfaConfiguration: "OFF"
+      LambdaConfig:
+        CreateAuthChallenge: !GetAtt CreateAuthChallenge.Arn
+        DefineAuthChallenge: !GetAtt DefineAuthChallenge.Arn
+        PreSignUp: !GetAtt PreSignUp.Arn
+        VerifyAuthChallengeResponse: !GetAtt VerifyAuthChallengeResponse.Arn
+        PostAuthentication: !GetAtt PostAuthentication.Arn
+
+  DefineAuthChallengeInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DefineAuthChallenge.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  CreateAuthChallengeInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CreateAuthChallenge.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  VerifyAuthChallengeResponseInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt VerifyAuthChallengeResponse.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  PreSignUpInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PreSignUp.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  PostAuthenticationInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PostAuthentication.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -18,7 +152,7 @@ Resources:
       UserPoolId:
         Ref: CognitoUserPool
       ExplicitAuthFlows:
-        - ADMIN_NO_SRP_AUTH
+        - CUSTOM_AUTH_FLOW_ONLY
       GenerateSecret: false
 
 # Print out the Id of the User Pool that is created

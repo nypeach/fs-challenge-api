@@ -1,16 +1,18 @@
-Resources:
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
 
+Resources:
   DefineAuthChallenge:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/auth/
+      CodeUri: lambda-triggers/auth-functions/
       Handler: define-auth-challenge.main
       Runtime: nodejs12.x
 
   CreateAuthChallenge:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/auth/
+      CodeUri: lambda-triggers/auth-functions/
       Handler: create-auth-challenge.main
       Runtime: nodejs12.x
       Environment:
@@ -27,21 +29,21 @@ Resources:
   VerifyAuthChallengeResponse:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/auth/
+      CodeUri: lambda-triggers/auth-functions/
       Handler: verify-auth-challenge-response.main
       Runtime: nodejs12.x
 
   PreSignUp:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/auth/
+      CodeUri: lambda-triggers/auth-functions/
       Handler: pre-sign-up.main
       Runtime: nodejs12.x
 
   PostAuthentication:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/auth/
+      CodeUri: lambda-triggers/auth-functions/
       Handler: post-authentication.main
       Runtime: nodejs12.x
       Role: !GetAtt PostAuthenticationRole.Arn
@@ -72,7 +74,7 @@ Resources:
             Action:
               - cognito-idp:AdminUpdateUserAttributes
             Resource:
-              - !GetAtt UserPool.Arn
+              - !GetAtt CognitoUserPool.Arn
       Roles:
         - !Ref PostAuthenticationRole
 
@@ -114,35 +116,35 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt DefineAuthChallenge.Arn
       Principal: cognito-idp.amazonaws.com
-      SourceArn: !GetAtt UserPool.Arn
+      SourceArn: !GetAtt CognitoUserPool.Arn
   CreateAuthChallengeInvocationPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt CreateAuthChallenge.Arn
       Principal: cognito-idp.amazonaws.com
-      SourceArn: !GetAtt UserPool.Arn
+      SourceArn: !GetAtt CognitoUserPool.Arn
   VerifyAuthChallengeResponseInvocationPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt VerifyAuthChallengeResponse.Arn
       Principal: cognito-idp.amazonaws.com
-      SourceArn: !GetAtt UserPool.Arn
+      SourceArn: !GetAtt CognitoUserPool.Arn
   PreSignUpInvocationPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt PreSignUp.Arn
       Principal: cognito-idp.amazonaws.com
-      SourceArn: !GetAtt UserPool.Arn
+      SourceArn: !GetAtt CognitoUserPool.Arn
   PostAuthenticationInvocationPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt PostAuthentication.Arn
       Principal: cognito-idp.amazonaws.com
-      SourceArn: !GetAtt UserPool.Arn
+      SourceArn: !GetAtt CognitoUserPool.Arn
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient

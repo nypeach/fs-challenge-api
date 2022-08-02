@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AnomalyInnovations/serverless-nodejs-starter.git"
+    "url": ""
   },
   "devDependencies": {
     "aws-sdk": "^2.1184.0",
@@ -19,6 +19,8 @@
     "serverless-offline": "^5.3.3"
   },
   "dependencies": {
-    "uuid": "^7.0.3"
+    "aws-lambda": "^1.0.7",
+    "uuid": "^7.0.3",
+    "crypto-secure-random-digit": "^1.0.9"
   }
 }

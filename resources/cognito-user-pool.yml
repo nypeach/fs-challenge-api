@@ -3,15 +3,15 @@ Resources:
   DefineAuthChallenge:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/define-auth-challenge/
-      Handler: define-auth-challenge.handler
+      CodeUri: lambda-triggers/auth/
+      Handler: define-auth-challenge.main
       Runtime: nodejs12.x
 
   CreateAuthChallenge:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/create-auth-challenge/
-      Handler: create-auth-challenge.handler
+      CodeUri: lambda-triggers/auth/
+      Handler: create-auth-challenge.main
       Runtime: nodejs12.x
       Environment:
         Variables:
@@ -27,22 +27,22 @@ Resources:
   VerifyAuthChallengeResponse:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/verify-auth-challenge-response/
-      Handler: verify-auth-challenge-response.handler
+      CodeUri: lambda-triggers/auth/
+      Handler: verify-auth-challenge-response.main
       Runtime: nodejs12.x
 
   PreSignUp:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/pre-sign-up/
-      Handler: pre-sign-up.handler
+      CodeUri: lambda-triggers/auth/
+      Handler: pre-sign-up.main
       Runtime: nodejs12.x
 
   PostAuthentication:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-triggers/post-authentication/
-      Handler: post-authentication.handler
+      CodeUri: lambda-triggers/auth/
+      Handler: post-authentication.main
       Runtime: nodejs12.x
       Role: !GetAtt PostAuthenticationRole.Arn
 

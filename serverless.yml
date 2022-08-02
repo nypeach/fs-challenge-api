@@ -49,7 +49,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in create.js
     # - path: url path is /wus
     # - method: POST request
-    handler: lambda-triggers/create.main
+    handler: lambda-triggers/db-functions/create.main
     events:
       - http:
           path: wus
@@ -61,7 +61,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /wus/{id}
     # - method: GET request
-    handler: lambda-triggers/get.main
+    handler: lambda-triggers/db-functions/get.main
     events:
       - http:
           path: wus/{id}
@@ -72,7 +72,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
     # - method: GET request
-    handler: lambda-triggers/list.main
+    handler: lambda-triggers/db-functions/list.main
     events:
       - http:
           path: wus
@@ -83,7 +83,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /wus/{id}
     # - method: PUT request
-    handler: lambda-triggers/update.main
+    handler: lambda-triggers/db-functions/update.main
     events:
       - http:
           path: wus/{id}
@@ -94,7 +94,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /wus/{id}
     # - method: DELETE request
-    handler: lambda-triggers/delete.main
+    handler: lambda-triggers/db-functions/delete.main
     events:
       - http:
           path: wus/{id}

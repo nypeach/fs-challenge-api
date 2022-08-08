@@ -14,7 +14,7 @@ custom:
   # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-wus
+  tableName: ${self:custom.stage}-dws
 
 provider:
   name: aws
@@ -42,9 +42,44 @@ provider:
       # Restrict our IAM role permissions to
       # the specific table for the stage
       Resource:
-        - "Fn::GetAtt": [ WusTable, Arn ]
+        - "Fn::GetAtt": [ dwsTable, Arn ]
 
 functions:
+  preSignUp:
+    handler: lambda-triggers/auth-functions/pre-sign-up.main
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.stage}-user-pool
+          trigger: PreSignUp
+          existing: true
+  createAuthChallenge:
+    handler: lambda-triggers/auth-functions/create-auth-challenge.main
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.stage}-user-pool
+          trigger: CreateAuthChallenge
+          existing: true
+  defineAuthChallenge:
+    handler: lambda-triggers/auth-functions/define-auth-challenge.main
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.stage}-user-pool
+          trigger: DefineAuthChallenge
+          existing: true
+  verifyAuthChallengeResponse:
+    handler: lambda-triggers/auth-functions/verify-auth-challenge-response.main
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.stage}-user-pool
+          trigger: VerifyAuthChallengeResponse
+          existing: true
+  postAuthentication:
+    handler: lambda-triggers/auth-functions/post-authentication.main
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.stage}-user-pool
+          trigger: PostAuthentication
+          existing: true
   create:
     # Defines an HTTP API endpoint that calls the main function in create.js
     # - path: url path is /wus
@@ -52,11 +87,10 @@ functions:
     handler: lambda-triggers/db-functions/create.main
     events:
       - http:
-          path: wus
+          path: dws
           cors: true
           method: post
           authorizer: aws_iam
-
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /wus/{id}
@@ -64,7 +98,7 @@ functions:
     handler: lambda-triggers/db-functions/get.main
     events:
       - http:
-          path: wus/{id}
+          path: dws/{id}
           cors: true
           method: get
           authorizer: aws_iam
@@ -75,7 +109,7 @@ functions:
     handler: lambda-triggers/db-functions/list.main
     events:
       - http:
-          path: wus
+          path: dws
           cors: true
           method: get
           authorizer: aws_iam
@@ -86,7 +120,7 @@ functions:
     handler: lambda-triggers/db-functions/update.main
     events:
       - http:
-          path: wus/{id}
+          path: dws/{id}
           cors: true
           method: put
           authorizer: aws_iam
@@ -97,7 +131,7 @@ functions:
     handler: lambda-triggers/db-functions/delete.main
     events:
       - http:
-          path: wus/{id}
+          path: dws/{id}
           cors: true
           method: delete
           authorizer: aws_iam
